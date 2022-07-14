@@ -37,6 +37,17 @@ const FilesList = () => {
     }
   };
 
+  const deleteFile = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/delete/${id}`);
+      setErrorMsg('');
+    } catch(error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMsg('Error while deleting file. Try again later');
+      }
+    }
+  }
+
   return (
     <div className="files-container">
       {errorMsg && <p className="errorMsg">{errorMsg}</p>}
@@ -46,6 +57,7 @@ const FilesList = () => {
             <th>Title</th>
             <th>Description</th>
             <th>Download File</th>
+            <th>Delete File</th>
           </tr>
         </thead>
         <tbody>
@@ -63,6 +75,16 @@ const FilesList = () => {
                       }
                     >
                       Download
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="#/"
+                      onClick={() =>
+                        deleteFile(_id)
+                      }
+                    >
+                      Delete 
                     </a>
                   </td>
                 </tr>

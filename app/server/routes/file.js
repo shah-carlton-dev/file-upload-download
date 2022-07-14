@@ -3,6 +3,8 @@ const express = require('express');
 const multer = require('multer');
 const File = require('../model/file');
 const Router = express.Router();
+const fs = require('fs');
+const mongoose = require('mongoose');
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -17,10 +19,10 @@ const upload = multer({
     fileSize: 50000000 // max file size 50MB = 50000000 bytes
   },
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpeg|jpg|png|pdf|doc|docx|xlsx|xls|mp4|mp3|mov|MOV)$/)) {
+    if (!file.originalname.match(/\.(mp4|MP4|MP3|mp3|mov|MOV|WMV|wmv)$/)) {
       return cb(
         new Error(
-          'only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls, mp4, mp3, or mov format.'
+          'only upload files with mp4, mp3, wmv or mov format.'
         )
       );
     }
@@ -79,5 +81,20 @@ Router.get('/download/:id', async (req, res) => {
     res.status(400).send('Error while downloading file. Try again later.');
   }
 });
+
+Router.delete('/delete/:id', async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+    fs.unlink(path.join(__dirname, '..', file.file_path), (err) => {
+      if (err) { 
+        console.error(err)
+      }
+    })
+    file.remove({_id:mongoose.Types.ObjectId(req.params.id)});
+  } catch (error) {
+    res.status(400).send('Error while deleting file. Try again later.');
+  }
+});
+
 
 module.exports = Router;
