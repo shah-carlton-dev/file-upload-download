@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import download from 'downloadjs';
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
-
+import ReactPlayer from 'react-player';
+import {Col, Row, Container} from 'react-bootstrap';
 const FilesList = () => {
   const [filesList, setFilesList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-
+  const [preview, setPreview] = useState([]);
+  const [showPreview, setShowPreview] = useState(false);
   useEffect(() => {
     const getFilesList = async () => {
       try {
@@ -44,11 +46,12 @@ const FilesList = () => {
     } catch(error) {
       if (error.response && error.response.status === 400) {
         setErrorMsg('Error while deleting file. Try again later');
-      }
+      } 
     }
   }
 
   return (
+    <>
     <div className="files-container">
       {errorMsg && <p className="errorMsg">{errorMsg}</p>}
       <table className="files-table">
@@ -58,6 +61,7 @@ const FilesList = () => {
             <th>Description</th>
             <th>Download File</th>
             <th>Delete File</th>
+            <th>Preview Video</th>
           </tr>
         </thead>
         <tbody>
@@ -70,8 +74,9 @@ const FilesList = () => {
                   <td>
                     <a
                       href="#/"
-                      onClick={() =>
+                      onClick={() => {
                         downloadFile(_id, file_path, file_mimetype)
+                      }
                       }
                     >
                       Download
@@ -87,6 +92,18 @@ const FilesList = () => {
                       Delete 
                     </a>
                   </td>
+                  <td>
+                    <a
+                      href="#/"
+                      onClick={() => {
+                        setPreview(`${API_URL}/download/${_id}`)
+                        setShowPreview(true);
+                      }
+                      }
+                    >
+                      Preview 
+                    </a>
+                  </td>
                 </tr>
               )
             )
@@ -99,7 +116,26 @@ const FilesList = () => {
           )}
         </tbody>
       </table>
-    </div>
+      </div>
+      {showPreview  ? (
+        <div className="container h-100">
+          <div className="row align-items-center h-100">
+            <div className="col-6 mx-auto">
+              <ReactPlayer url={preview} controls />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="container h-100">
+          <div className="row align-items-center h-100">
+            <div className="col-6 mx-auto">
+              preview displayed here
+            </div>
+          </div>
+        </div>
+      )}
+
+  </>
   );
 };
 
