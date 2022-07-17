@@ -5,6 +5,7 @@ const File = require('../model/file');
 const Router = express.Router();
 const fs = require('fs');
 const mongoose = require('mongoose');
+const ffmpeg = require('ffmpeg');
 
 const upload = multer({
   storage: multer.diskStorage({

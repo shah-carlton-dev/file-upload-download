@@ -4,11 +4,20 @@ import axios from 'axios';
 import { API_URL } from '../utils/constants';
 import ReactPlayer from 'react-player';
 import {Col, Row, Container} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 const FilesList = () => {
   const [filesList, setFilesList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [preview, setPreview] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     const getFilesList = async () => {
       try {
@@ -98,6 +107,7 @@ const FilesList = () => {
                       onClick={() => {
                         setPreview(`${API_URL}/download/${_id}`)
                         setShowPreview(true);
+                        handleShow();
                       }
                       }
                     >
@@ -117,7 +127,7 @@ const FilesList = () => {
         </tbody>
       </table>
       </div>
-      {showPreview  ? (
+      {/* {showPreview  ? (
         <div className="container h-100">
           <div className="row align-items-center h-100">
             <div className="col-6 mx-auto">
@@ -133,7 +143,26 @@ const FilesList = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
+      <Modal size="lg" show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Preview</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div className="container h-100">
+          <div className="row align-items-center h-100">
+            <div className="col mx-auto">
+              <ReactPlayer url={preview} controls />
+            </div>
+          </div>
+        </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
   </>
   );

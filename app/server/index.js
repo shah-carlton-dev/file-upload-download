@@ -1,7 +1,10 @@
 const express = require('express');
 const path = require('path');
+
+// routes
 const fileRoute = require('./routes/file');
 const pythonRoute = require('./routes/python');
+
 const cors = require('cors');
 require('./db/db');
 

@@ -1,18 +1,27 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { Navbar, Container} from 'react-bootstrap';
+import Toggle from './Toggle.js';
 
 const Header = () => {
   return (
     <div className="header">
-      <h1>File Upload And Download</h1>
-      <nav>
-        <NavLink activeClassName="active" to="/" exact={true}>
-          Home
+      <Navbar>
+        <Container>
+        <Navbar.Brand href="/">Audio Cleaning</Navbar.Brand>
+        <NavLink activeClassName="active" to="/upload">
+          Upload
         </NavLink>
         <NavLink activeClassName="active" to="/list">
           Files List
         </NavLink>
-      </nav>
+        <Navbar.Collapse className='justify-content-end'>
+        <Toggle/>
+        </Navbar.Collapse>
+        </Container>
+
+      </Navbar>
     </div>
   );
 };

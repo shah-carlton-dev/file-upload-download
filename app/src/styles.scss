@@ -3,7 +3,6 @@
     padding: 0;
     box-sizing: border-box;
   }
-  
   body {
     letter-spacing: 1px;
     padding: 10px;
@@ -139,3 +138,72 @@
       width: 100%;
     }
   }
+
+  // background colors: 
+
+  // dark
+  // #root, body{
+  //   background-color: rgb(37,36,36);
+  // }
+
+  // p, h1, h2, h3, h4, h5, h6, th, tr {
+  //   color: rgb(249,259, 250);
+  // }
+
+  // input[type="text"], textarea {
+  //   background-color: rgb(37,36,36);  
+  // }
+
+  // light 
+    // background colors: 
+    // #root, body{
+    //   background-color: rgb(249,259, 250);
+    // }
+  
+    // p, h1, h2, h3, h4, h5, h6, th, tr {
+    //   color: rgb(37,36,36);
+    // }
+  
+    // input[type="text"], textarea {
+    //   background-color: rgb(249,259, 250);  
+    // }
+  
+    .theme-dark {
+      --dark-text: rgb(249,259, 250);
+      --light-text: rgb(249,259, 250);  
+      --dark-background: rgb(37,36,36);
+      --light-background: rgb(37,36,36);
+      --accent: rgb(37,36,36);
+      --button-border: rgb(249,259, 250);
+    }
+
+    .theme-light {
+      --dark-text: rgb(37,36,36);
+      --light-text: rgb(37,36,36);
+      --dark-background: rgb(249,259, 250);
+      --light-background: rgb(249,259, 250);
+      --accent: rgb(249,259, 250);
+      --button-border: rgb(37,36,36);
+    }
+
+    html, #root {
+      background-color: var(--dark-background);
+      color: var(--dark-text);
+    }
+    
+        // background colors: 
+    #root, body {
+      background-color: var(--dark-background);
+    }
+  
+    body, p, h1, h2, h3, h4, h5, h6, th, tr {
+      color: var(--dark-text);
+    }
+  
+    input[type="text"], textarea {
+      background-color: var(--dark-background);  
+    }
+    
+    .navbar-light .navbar-brand {
+      color: var(--dark-text);
+    }
