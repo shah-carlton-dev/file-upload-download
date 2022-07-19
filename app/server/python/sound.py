@@ -1,4 +1,6 @@
 # pip install open-cv ffmpeg moviepy pydub sox
+# https://pysox.readthedocs.io/en/latest/api.html
+
 import sys
 import cv2
 import os

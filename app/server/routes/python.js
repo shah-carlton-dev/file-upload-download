@@ -7,7 +7,7 @@ const dashes = "----------------------------"
 Router.post('/sendFile', (req, res) => {
 	let data;
 	// spawn new child process to call the python script
-	const python = spawn('python3', ['python/script1.py', req.query.filepath], { stdio: 'inherit' });
+	const python = spawn('python3', ['python/sound.py', req.query.filepath], { stdio: 'inherit' });
 	// collect data from script
 	python.on('data', (output) => {
 		console.log('Pipe data from python script ...');
