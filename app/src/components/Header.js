@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Navbar, Container} from 'react-bootstrap';
 import Toggle from './Toggle.js';
+import { keepTheme } from '../utils/themes';
 
 const Header = () => {
+  useEffect(() => {
+    keepTheme();
+  })
   return (
     <div className="header">
       <Navbar>

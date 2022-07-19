@@ -3,7 +3,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
-import { keepTheme } from '../utils/themes';
+// import { keepTheme } from '../utils/themes';
 const Upload = (props) => {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
@@ -15,9 +15,9 @@ const Upload = (props) => {
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
   const dropRef = useRef(); // React ref for managing the hover state of droppable area
 
-  useEffect(() => {
-      keepTheme();
-  })
+  // useEffect(() => {
+  //     keepTheme();
+  // })
   const handleInputChange = (event) => {
     setState({
       ...state,
