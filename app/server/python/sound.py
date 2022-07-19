@@ -60,6 +60,7 @@ def remix_audio():
     tfm.effects_log
 
 def make_array():
+	# audio from the file gets loaded into a numpy array of shape (num_channels, num_samples)
 	tfm = sox.Transformer()
 	arr = tfm.build_array(input_filepath=audpath)
 	print(arr)
