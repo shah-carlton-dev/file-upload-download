@@ -41,7 +41,6 @@ def play_video():
 
 
 def remix_audio():
-    strip_audio()
     sox.file_info.validate_input_file(audpath)
     # create transformer
     tfm = sox.Transformer()
@@ -58,8 +57,13 @@ def remix_audio():
     # see the applied effects
     tfm.effects_log
 
+def make_array():
+	tfm = sox.Transformer()
+	arr = tfm.build_array(input_filepath=audpath)
+	print(arr)
 
-remix_audio()
+strip_audio()
+make_array()
 
 
 sys.stdout.flush()
