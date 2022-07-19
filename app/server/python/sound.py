@@ -64,6 +64,7 @@ def make_array():
 	arr = tfm.build_array(input_filepath=audpath)
 	print(arr)
 
+
 strip_audio()
 make_array()
 

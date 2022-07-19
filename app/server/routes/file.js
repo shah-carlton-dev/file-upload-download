@@ -6,6 +6,8 @@ const Router = express.Router();
 const fs = require('fs');
 const mongoose = require('mongoose');
 const ffmpeg = require('ffmpeg');
+const { spawn } = require('child_process');
+const dashes = "----------------------------";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -31,6 +33,19 @@ const upload = multer({
   }
 });
 
+// helper function to convert mp4 to mp3 and store file 
+const convert = (filepath) => {
+  let data;
+  const python = spawn('python3', ['python/convert.py', filepath], { stdio: 'inherit' });
+  // python.on('data', (output) => {
+  // 	console.log('Pipe data from python script...');
+  // 	data = output.toString();
+  // })
+  python.on('close', (code) => {
+      console.log(`${dashes} python process [CONVERT] shutting down all stdio - code: ${code} ${dashes}`);
+  })
+} 
+
 Router.post(
   '/upload',
   upload.single('file'),
@@ -38,14 +53,17 @@ Router.post(
     try {
       const { title, description } = req.body;
       const { path, mimetype } = req.file;
+      const mp3path = (path.substr(0, path.lastIndexOf('.')) || path) + ".mp3";
       const file = new File({
         title,
         description,
         file_path: path,
+        mp3_path: mp3path,
         file_mimetype: mimetype
       });
       await file.save();
       res.send('file uploaded successfully.');
+      convert(file.file_path);
     } catch (error) {
       res.status(400).send('Error while uploading file. Try again later.');
       console.log("error uploading file");
@@ -83,10 +101,27 @@ Router.get('/download/:id', async (req, res) => {
   }
 });
 
+Router.get('/downloadAudio/:id', async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+    res.set({
+      'Content-Type': 'audio/mpeg'
+    });
+    res.sendFile(path.join(__dirname, '..', file.mp3_path));
+  } catch (error) {
+    res.status(400).send('Error while downloading file. Try again later.');
+  }
+});
+
 Router.delete('/delete/:id', async (req, res) => {
   try {
     const file = await File.findById(req.params.id);
     fs.unlink(path.join(__dirname, '..', file.file_path), (err) => {
+      if (err) { 
+        console.error(err)
+      }
+    })
+    fs.unlink(path.join(__dirname, '..', file.mp3_path), (err) => {
       if (err) { 
         console.error(err)
       }

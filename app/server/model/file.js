@@ -16,6 +16,10 @@ const fileSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    mp3_path: {
+      type: String,
+      required: true
+    },
     file_mimetype: {
       type: String,
       required: true

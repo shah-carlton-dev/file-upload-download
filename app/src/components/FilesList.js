@@ -6,15 +6,15 @@ import ReactPlayer from 'react-player';
 import {Col, Row, Container} from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import ReactAudioPlayer from 'react-audio-player';
 
 const FilesList = () => {
   const [filesList, setFilesList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [preview, setPreview] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
-
   const [show, setShow] = useState(false);
-
+  const [audio, setAudio] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -106,6 +106,7 @@ const FilesList = () => {
                       href="#/"
                       onClick={() => {
                         setPreview(`${API_URL}/download/${_id}`)
+                        setAudio(`${API_URL}/downloadAudio/${_id}`)
                         setShowPreview(true);
                         handleShow();
                       }
@@ -149,6 +150,7 @@ const FilesList = () => {
           <Modal.Title>Preview</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <h4>Original file:</h4>
         <div className="container h-100">
           <div className="row align-items-center h-100">
             <div className="col mx-auto">
@@ -156,6 +158,16 @@ const FilesList = () => {
             </div>
           </div>
         </div>
+
+        <h4>MP3 file:</h4>
+        <div className="container h-100">
+          <div className="row align-items-center h-100">
+            <div className="col mx-auto">
+              <ReactAudioPlayer src={audio} controls />
+            </div>
+          </div>
+        </div>
+        
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
