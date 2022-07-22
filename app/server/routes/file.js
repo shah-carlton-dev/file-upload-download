@@ -35,7 +35,6 @@ const upload = multer({
 
 // helper function to convert mp4 to mp3 and store file 
 const convert = (filepath) => {
-  let data;
   const python = spawn('python3', ['python/convert.py', filepath], { stdio: 'inherit' });
   // python.on('data', (output) => {
   // 	console.log('Pipe data from python script...');
@@ -45,7 +44,13 @@ const convert = (filepath) => {
       console.log(`${dashes} python process [CONVERT] shutting down all stdio - code: ${code} ${dashes}`);
   })
 } 
-
+// helper function to combine mp4 with converted mp3 and store file
+const combine = (filepath) => {
+  const python = spawn('python3', ['python/convert.py', filepath], { stdio: 'inherit'});
+  python.on('close', (code) => {
+    console.log(`${dashes} python process [COMBINE] shutting down all stdio - code: ${code} ${dashes}`);
+  } )
+}
 Router.post(
   '/upload',
   upload.single('file'),
@@ -54,16 +59,19 @@ Router.post(
       const { title, description } = req.body;
       const { path, mimetype } = req.file;
       const mp3path = (path.substr(0, path.lastIndexOf('.')) || path) + ".mp3";
+      const convpath = (path.substr(0, path.lastIndexOf('.')) || path) + "-converted.mp4";
       const file = new File({
         title,
         description,
         file_path: path,
         mp3_path: mp3path,
+        output_path: convpath,
         file_mimetype: mimetype
       });
       await file.save();
       res.send('file uploaded successfully.');
       convert(file.file_path);
+      combine(file.file_path);
     } catch (error) {
       res.status(400).send('Error while uploading file. Try again later.');
       console.log("error uploading file");
@@ -108,6 +116,18 @@ Router.get('/downloadAudio/:id', async (req, res) => {
       'Content-Type': 'audio/mpeg'
     });
     res.sendFile(path.join(__dirname, '..', file.mp3_path));
+  } catch (error) {
+    res.status(400).send('Error while downloading file. Try again later.');
+  }
+});
+
+Router.get('/downloadConverted/:id', async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+    res.set({
+      'Content-Type': file.file_mimetype
+    });
+    res.sendFile(path.join(__dirname, '..', file.output_path));
   } catch (error) {
     res.status(400).send('Error while downloading file. Try again later.');
   }
