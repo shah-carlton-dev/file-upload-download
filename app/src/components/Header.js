@@ -20,6 +20,9 @@ const Header = () => {
         <NavLink activeClassName="active" to="/list">
           Files List
         </NavLink>
+		<NavLink activeClassName="active" to="/devtools">
+          Dev
+        </NavLink>
         <Navbar.Collapse className='justify-content-end'>
         <Toggle/>
         </Navbar.Collapse>
